@@ -1,13 +1,29 @@
-## Running React on Repl.it
+# Solana Wallet Dapp
 
-[React](https://reactjs.org/) is a popular JavaScript library for building user interfaces.
+This is a straightforward decentralized application (Dapp) that allows users to create a new Solana Command-Line Interface (CLI) wallet. They can then request an airdrop of tokens to this wallet and subsequently transfer the airdropped tokens to their connected Phantom wallet.
 
-[Vite](https://vitejs.dev/) is a blazing fast frontend build tool that includes features like Hot Module Reloading (HMR), optimized builds, and TypeScript support out of the box.
+## Getting Started
 
-Using the two in conjunction is one of the fastest ways to build a web app.
+Download the codes by downloading the entire repository, in the project directory,  run the following command to install the dependencies:
 
-### Getting Started
-- Hit run
-- Edit [App.tsx](#src/App.tsx) and watch it live update!
+```shell
+ yarn install
+```
 
-By default, Replit runs the `dev` script, but you can configure it by changing the `run` field in the [configuration file](#.replit). Here are the vite docs for [serving production websites](https://vitejs.dev/guide/build.html)
+To start the project, run the following command:
+
+```shell
+yarn run dev
+```
+
+## Author
+
+[Michael](https://github.com/m-azra3l)
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+## Disclaimer
+
+This project is but an example project, it is not for the purpose of commercial use.
