@@ -1,4 +1,3 @@
-
 // import functionalities
 import './App.css';
 import {
@@ -124,6 +123,8 @@ export default function App() {
         const walletBalance = await connection.getBalance(
           new PublicKey(response.publicKey.toString())
         );
+        
+        // set wallet balance
         setWalletBalance(walletBalance);
 
       } catch (err) {
@@ -206,15 +207,11 @@ export default function App() {
 
   // transfer Sol
   const transferSol = async () => {
-    console.log(`Im here`);
     if (walletKey) {
       // Connect to the Devnet and make a wallet from privateKey
       const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
       const from = Keypair.fromSecretKey(userPrivateKey);
       const to = new PublicKey((walletKey));
-
-      console.log(`Im about to compile transaction`);
-      console.log(`cli wallet balance : ${to}`);
 
       // Send sol from "CLI" wallet and into "to" Phantom wallet
       var transaction = new Transaction().add(
@@ -224,7 +221,6 @@ export default function App() {
           lamports: (userWalletBalance - (1.9 * LAMPORTS_PER_SOL)),
         })
       );
-      console.log(`I've compiled`);
 
       // Sign transaction
       var signature = await sendAndConfirmTransaction(connection, transaction, [
