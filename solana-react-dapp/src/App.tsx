@@ -1,6 +1,5 @@
 
 // import functionalities
-import React from 'react';
 import './App.css';
 import {
   sendAndConfirmTransaction,
@@ -13,7 +12,6 @@ import {
   LAMPORTS_PER_SOL
 } from "@solana/web3.js";
 import { useEffect, useState } from "react";
-import './App.css'
 
 // create types
 type DisplayEncoding = "utf8" | "hex";
@@ -69,7 +67,7 @@ export default function App() {
   );
 
 
-  // balance of wallet
+  // create a state variable to store the balance of wallet
   const [walletBalance, setWalletBalance] = useState<any | undefined>(
     undefined
   );
@@ -84,13 +82,13 @@ export default function App() {
     false
   );
 
-  // Create a state variable to store the created wallet
+  // create a state variable to store the created wallet
   const [userWallet, setUserWallet] = useState<any | undefined>(undefined);
 
-  // Create a state variable to store the created wallet
+  // create a state variable to store the created wallet
   const [userPrivateKey, setUserPrivateKey] = useState<any | undefined>(undefined);
 
-  // CStore balance of wallets
+  // create a state variable to store balance of created wallet
   const [userWalletBalance, setUserWalletBalance] = useState<any | undefined>(undefined);
 
   // this is the function that runs whenever the component updates (e.g. render, refresh)
@@ -153,6 +151,7 @@ export default function App() {
     const { solana } = window;
     if (solana) {
       try {
+        // Create connection to the Devnet
         const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
         const newPair = new Keypair();
         const publicKey = new PublicKey(newPair.publicKey).toString();
@@ -209,13 +208,15 @@ export default function App() {
   const transferSol = async () => {
     console.log(`Im here`);
     if (walletKey) {
+      // Connect to the Devnet and make a wallet from privateKey
       const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
       const from = Keypair.fromSecretKey(userPrivateKey);
       const to = new PublicKey((walletKey));
 
       console.log(`Im about to compile transaction`);
-      console.log(`cli wallet balance : ${to}`)
-      // Send money from "CLI" wallet and into "to" Phantom wallet
+      console.log(`cli wallet balance : ${to}`);
+
+      // Send sol from "CLI" wallet and into "to" Phantom wallet
       var transaction = new Transaction().add(
         SystemProgram.transfer({
           fromPubkey: from.publicKey,
