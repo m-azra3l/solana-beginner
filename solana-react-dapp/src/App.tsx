@@ -3,6 +3,9 @@
 import React from 'react';
 import './App.css';
 import {
+  sendAndConfirmTransaction,
+  SystemProgram,
+  Keypair,
   PublicKey,
   Transaction,
   Connection,
@@ -71,6 +74,25 @@ export default function App() {
     undefined
   );
 
+  // create state variable to track the status of airdrop
+  const [airdropped, setAirdropped] = useState<boolean>(
+    false
+  );
+
+  // create state variable to track the status of airdrop
+  const [transferStatus, setTranferStatus] = useState<boolean>(
+    false
+  );
+
+  // Create a state variable to store the created wallet
+  const [userWallet, setUserWallet] = useState<any | undefined>(undefined);
+
+  // Create a state variable to store the created wallet
+  const [userPrivateKey, setUserPrivateKey] = useState<any | undefined>(undefined);
+
+  // CStore balance of wallets
+  const [userWalletBalance, setUserWalletBalance] = useState<any | undefined>(undefined);
+
   // this is the function that runs whenever the component updates (e.g. render, refresh)
   useEffect(() => {
     const provider = getProvider();
@@ -98,7 +120,7 @@ export default function App() {
         // update walletKey to be the public key
         setWalletKey(response.publicKey.toString());
 
-        const connection = new Connection(clusterApiUrl("mainnet-beta"), "confirmed");
+        const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
 
         // get wallet balance
         const walletBalance = await connection.getBalance(
@@ -126,19 +148,105 @@ export default function App() {
     }
   };
 
+  const createWallet = () => {
+    // @ts-ignore
+    const { solana } = window;
+    if (solana) {
+      try {
+        const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+        const newPair = new Keypair();
+        const publicKey = new PublicKey(newPair.publicKey).toString();
+        const privateKey = newPair.secretKey;
+
+        setUserWallet(publicKey);
+        setUserPrivateKey(privateKey);
+      } catch (err) {
+
+      }
+    }
+  };
+
+  const airdropSol = async () => {
+    // @ts-ignore
+    const { solana } = window;
+    if (solana) {
+      try {
+        // Connect to the Devnet and make a wallet from privateKey
+        const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+        const myWallet = await Keypair.fromSecretKey(userPrivateKey);
+
+        // Request airdrop of 2 SOL to the wallet
+        console.log("Airdropping some SOL to my wallet!");
+        const fromAirDropSignature = await connection.requestAirdrop(
+          new PublicKey(userWallet),
+          2 * LAMPORTS_PER_SOL
+        );
+        await connection.confirmTransaction(fromAirDropSignature);
+        setAirdropped(true);
+        userWalletBalance2();
+      } catch (err) {
+
+      }
+    }
+  };
+
+  const userWalletBalance2 = async () => {
+    //@ts-ignore
+    const { solana } = window;
+    if (solana) {
+
+      const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+
+      // get wallet balance
+      const walletBalance = await connection.getBalance(
+        new PublicKey(userWallet)
+      );
+      setUserWalletBalance(walletBalance)
+    }
+  };
+
+  // transfer Sol
+  const transferSol = async () => {
+    console.log(`Im here`);
+    if (walletKey) {
+      const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+      const from = Keypair.fromSecretKey(userPrivateKey);
+      const to = new PublicKey((walletKey));
+
+      console.log(`Im about to compile transaction`);
+      console.log(`cli wallet balance : ${to}`)
+      // Send money from "CLI" wallet and into "to" Phantom wallet
+      var transaction = new Transaction().add(
+        SystemProgram.transfer({
+          fromPubkey: from.publicKey,
+          toPubkey: to,
+          lamports: (userWalletBalance - (1.9 * LAMPORTS_PER_SOL)),
+        })
+      );
+      console.log(`I've compiled`);
+
+      // Sign transaction
+      var signature = await sendAndConfirmTransaction(connection, transaction, [
+        from,
+      ]);
+      const senderBalanceAfter = await connection.getBalance(from.publicKey);
+      setUserWalletBalance(senderBalanceAfter);
+      const receiverBalanceAfter = await connection.getBalance(to);
+      setWalletBalance(receiverBalanceAfter);
+      setTranferStatus(true);
+    }
+  };
+
   // HTML code for the app
   return (
     <div className="App">
       <header className="App-header">
+        <div className="flexDiv">
+          <div className="innerDiv">
             <h2> {!walletKey ? `Connect to Phantom Wallet` : `Connected to Phantom Wallet`}</h2>
             {provider && !walletKey && (
               <button
-                style={{
-                  fontSize: "16px",
-                  padding: "15px",
-                  fontWeight: "bold",
-                  borderRadius: "5px",
-                }}
+                className="button"
                 onClick={connectWallet}
               >
                 Connect Wallet
@@ -155,12 +263,7 @@ export default function App() {
             {provider && walletKey && (
               <div>
                 <button
-                  style={{
-                    fontSize: "16px",
-                    padding: "15px",
-                    fontWeight: "bold",
-                    borderRadius: "5px",
-                  }}
+                  className="button"
                   onClick={disconnectWallet}> Disconnect
                 </button>
               </div>
@@ -172,6 +275,62 @@ export default function App() {
                 <a href="https://phantom.app/">Phantom Browser extension</a>
               </p>
             )}
+          </div>
+          <div className="innerDiv">
+            {!userWallet && (
+              <div>
+                <h2>Create New Wallet</h2>
+                <button
+                  className="button"
+                  onClick={createWallet}
+                >
+                  Create Wallet
+                </button>
+              </div>
+            )}
+            {userWallet && !airdropped && (
+              <div>
+                <h2>Airdrop Tokens To Wallet</h2>
+                <p>{userWallet}</p>
+                <button
+                  className="button"
+                  onClick={airdropSol}
+                >
+                  Airdrop Sol
+                </button>
+              </div>
+            )}
+            {airdropped && (
+              <div>
+                <h2>Airdropped!!!</h2>
+                <p>Airdrop successful!!!</p>
+                <p>Balance:</p>
+                <p>{userWalletBalance ? `${parseInt(userWalletBalance) / LAMPORTS_PER_SOL} SOL` : `0`}</p>
+              </div>
+            )}
+            {userWallet && airdropped && (
+              <div>
+                <h2>Transfer Sol</h2>
+                <button
+                  className="button"
+                  onClick={transferSol}
+                >
+                  Transfer
+                </button>
+              </div>
+            )}
+            {transferStatus && (
+              <div>
+                <h2>Transferred!!!</h2>
+                <p>Transaction successful!!!</p>
+                <p>Sender Balance:</p>
+                <p>{userWalletBalance ? `${parseInt(userWalletBalance) / LAMPORTS_PER_SOL} SOL` : `0`}</p>
+                <p>Receiver Balance:</p>
+                <p>{walletBalance ? `${parseInt(walletBalance) / LAMPORTS_PER_SOL} SOL` : `0`}</p>
+              </div>
+            )}
+          </div>
+        </div>
       </header>
     </div>
   );
