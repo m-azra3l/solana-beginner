@@ -11,6 +11,8 @@ import {
   LAMPORTS_PER_SOL
 } from "@solana/web3.js";
 import { useEffect, useState } from "react";
+import * as buffer from "buffer";
+window.Buffer = buffer.Buffer;
 
 // create types
 type DisplayEncoding = "utf8" | "hex";
@@ -123,7 +125,7 @@ export default function App() {
         const walletBalance = await connection.getBalance(
           new PublicKey(response.publicKey.toString())
         );
-        
+
         // set wallet balance
         setWalletBalance(walletBalance);
 
@@ -212,13 +214,15 @@ export default function App() {
       const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
       const from = Keypair.fromSecretKey(userPrivateKey);
       const to = new PublicKey((walletKey));
+      const lamportsToSend = 1.9 * LAMPORTS_PER_SOL;
 
-      // Send sol from "CLI" wallet and into "to" Phantom wallet
+      // Send sol from created wallet and into the Phantom wallet
       var transaction = new Transaction().add(
         SystemProgram.transfer({
           fromPubkey: from.publicKey,
           toPubkey: to,
-          lamports: (userWalletBalance - (1.9 * LAMPORTS_PER_SOL)),
+          lamports: lamportsToSend,
+
         })
       );
 
@@ -252,7 +256,7 @@ export default function App() {
             {provider && walletKey && (
               <div>
                 <p>Connected account:</p>
-                <p>{walletKey}</p>
+                <small>{walletKey}</small>
                 <p>Balance:</p>
                 <p>{walletBalance ? `${parseInt(walletBalance) / LAMPORTS_PER_SOL} SOL` : `0 SOL`}</p>
               </div>
@@ -287,8 +291,10 @@ export default function App() {
             )}
             {userWallet && !airdropped && (
               <div>
-                <h2>Airdrop Tokens To Wallet</h2>
-                <p>{userWallet}</p>
+                <h2>Airdrop To Wallet</h2>
+                <small>{userWallet}</small>
+                <br />
+                <br />
                 <button
                   className="button"
                   onClick={airdropSol}
@@ -300,14 +306,14 @@ export default function App() {
             {airdropped && (
               <div>
                 <h2>Airdropped!!!</h2>
-                <p>Airdrop successful!!!</p>
+                <p>Airdrop successful</p>
                 <p>Balance:</p>
                 <p>{userWalletBalance ? `${parseInt(userWalletBalance) / LAMPORTS_PER_SOL} SOL` : `0`}</p>
               </div>
             )}
             {userWallet && airdropped && (
               <div>
-                <h2>Transfer Sol</h2>
+                <p>Transfer Sol</p>
                 <button
                   className="button"
                   onClick={transferSol}
@@ -319,7 +325,7 @@ export default function App() {
             {transferStatus && (
               <div>
                 <h2>Transferred!!!</h2>
-                <p>Transaction successful!!!</p>
+                <p>Transaction successful</p>
                 <p>Sender Balance:</p>
                 <p>{userWalletBalance ? `${parseInt(userWalletBalance) / LAMPORTS_PER_SOL} SOL` : `0`}</p>
                 <p>Receiver Balance:</p>
