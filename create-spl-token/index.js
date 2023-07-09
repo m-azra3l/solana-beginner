@@ -62,8 +62,8 @@ import {
         1000000000,
         []
     );
-    console.log('mint tx:', signature);
 
+    console.log('mint tx:', signature);
 
     //Step 5: Get the token account of the to-wallet address and if it does not exist, create it
     
@@ -86,6 +86,7 @@ import {
         1000000000,
         []
     );
+    
     console.log('transfer tx:', signature);
 
 })();
