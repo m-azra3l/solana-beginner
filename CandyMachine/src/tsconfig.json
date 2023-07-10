@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "es2019",
+    "module": "commonjs",
+    "outDir": "./../build",
+    "strict": true,
+    "declaration": false,
+    "esModuleInterop": true,
+    "noImplicitAny": false,
+    "removeComments": false,
+    "isolatedModules": false,
+    "ignoreDeprecations": "5.0",
+    "experimentalDecorators": true,
+    "downlevelIteration": true,
+    "emitDecoratorMetadata": true,
+    "noLib": false,
+    "preserveConstEnums": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "lib": ["dom", "es2019"],
+    "types": ["jest", "node", "webgl2"]
+  },
+  "exclude": ["node_modules", "typings/browser", "typings/browser.d.ts"],
+  "atom": {
+    "rewriteTsconfig": false
+  }
+}
