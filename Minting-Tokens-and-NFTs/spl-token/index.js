@@ -24,12 +24,13 @@ import {
     // console.log(toWallet.secretKey);
 
     // Uncomment to use secret key
-    // const fromSecretKey = new Uint8Array([
-    //     Your secret key
-    // ]);
-    // const toSecretKey = new Uint8Array([
-    //     Your secret key
-    // ]);
+    const fromSecretKey = new Uint8Array([
+        Your secret key
+    ]);
+    const toSecretKey = new Uint8Array([
+        Your secret key
+    ]);
+
     // console.log(Buffer.from(fromSecretKey).toString('base64'));
     // console.log(Buffer.from(toSecretKey).toString('base64'));
 
