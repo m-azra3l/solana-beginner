@@ -18,12 +18,7 @@ const INITIALIZE = true;
 
     // Secret key for the account
     const fromSecretKey = new Uint8Array([
-        218, 224, 12, 131, 142, 125, 34, 96, 233, 45, 121,
-        233, 242, 42, 0, 221, 27, 195, 204, 56, 33, 6,
-        74, 153, 198, 168, 42, 42, 137, 172, 81, 32, 244,
-        238, 127, 71, 251, 209, 193, 53, 42, 50, 167, 46,
-        211, 25, 56, 133, 169, 166, 126, 116, 122, 131, 159,
-        68, 143, 51, 60, 176, 198, 137, 150, 230
+       Your secret key
     ]);
 
     // Creating a keypair from the secret key
