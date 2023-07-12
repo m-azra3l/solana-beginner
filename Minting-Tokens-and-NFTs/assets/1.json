@@ -1,0 +1,20 @@
+{
+  "name": "Uhanmi #2",
+  "symbol": "UHM",
+  "description": "Collection of 5 images of Uhanmi NFT the Solana blockchain. This is the number 2/5.",
+  "image": "1.png",
+  "attributes": [
+    {
+      "trait_type": "Art",
+      "value": "1"
+    }
+  ],
+  "properties": {
+    "files": [
+      {
+        "uri": "1.jpg",
+        "type": "image/png"
+      }
+    ]
+  }
+}
