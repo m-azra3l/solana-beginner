@@ -14,3 +14,4 @@ yarn-error.log*
 wallet.json
 cache.json
 config.json
+sugar.log
