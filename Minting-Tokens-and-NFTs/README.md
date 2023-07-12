@@ -15,9 +15,9 @@ In this project, and spl token is created called "ZRA3L Token", an NFT is create
 
 - run `yarn install` to install the necessary dependencies
 - have [Solana CLI](https://docs.solana.com/cli/install-solana-cli-tools) installed
-- run `node index.js` to create an spl token, mint 5 tokens to the `fromWallet` account and transfer 2 tokens to the `toWallet` account
+- run `node spl-token/index.js` to create an spl token, mint 5 tokens to the `fromWallet` account and transfer 2 tokens to the `toWallet` account
 - edit `package.json` and delete line 6 `type: module`.
-- run `node token.js` to add metadata to the spl token, giving it a name and image.
+- run `node spl-token/token.js` to add metadata to the spl token, giving it a name and image.
 
 ### Creating the NFT
 
